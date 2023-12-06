@@ -49,7 +49,7 @@ public class TownNameGetterFromCSV {
 
                 CSVRecord record = parser.getRecords().get(0);
 
-                if (townNameSearcher.search(record.get(4), keyword)) {
+                if (townNameSearcher.search(record.get(5), keyword)) {
                     matchList.add(record.get(5) + "," + record.get(6) + "," + record.get(7) + "," + record.get(8));
                     System.out.println(record.get(5) + "," + record.get(6) + "," + record.get(7) + "," + record.get(8));
                 }
