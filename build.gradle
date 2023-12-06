@@ -34,5 +34,5 @@ tasks.named('test') {
 }
 
 application {
-	mainClass.set('com.example.demo.StringSearch')
+	mainClass.set('com.example.demo.AddressFinder')
 }

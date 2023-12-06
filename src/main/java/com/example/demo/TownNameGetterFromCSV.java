@@ -4,23 +4,26 @@ import org.springframework.stereotype.Component;
 import org.apache.commons.csv.*;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Component
-public class GetTownName {
+public class TownNameGetterFromCSV {
 
-    private final SearchTownName searchTownName = new SearchTownName();
+    private final TownNameSearcher townNameSearcher = new TownNameSearcher();
 
     private final String dir_path = "/Users/yokohama/AddressSearch/dataset/";
 
-    private final String extension = ".csv";
 
     public Set<String> getCsvInfo(String keyword) throws IOException {
 
         File dir = new File(dir_path);
         File[] files = dir.listFiles();
 
-        for (File file : files) {
+        Set<String> matchList = new HashSet<>();
+
+        for (File file : Objects.requireNonNull(files)) {
 
             try (
                     CSVParser parser = CSVFormat
@@ -41,19 +44,19 @@ public class GetTownName {
                                     "Flg4",
                                     "ViewUpdates",
                                     "ReasonForChange")
-                            .withFirstRecordAsHeader()
                             .parse(new BufferedReader(new InputStreamReader(new FileInputStream(file))))) {
-//                            .parse(new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream(csvFilePath))))) {
 
 
                 CSVRecord record = parser.getRecords().get(0);
-                if (searchTownName.search(record.get(4), keyword)) {
-                    return Set.of(record.get(5), record.get(6), record.get(7), record.get(8));
+
+                if (townNameSearcher.search(record.get(4), keyword)) {
+                    matchList.add(record.get(5) + "," + record.get(6) + "," + record.get(7) + "," + record.get(8));
+                    System.out.println(record.get(5) + "," + record.get(6) + "," + record.get(7) + "," + record.get(8));
                 }
 
             }
 
         }
-        return null;
+        return matchList;
     }
 }
