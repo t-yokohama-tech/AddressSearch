@@ -19,45 +19,22 @@ public class TownNameGetterFromCSV {
     public Set<String> getCsvInfo(String keyword) throws IOException {
 
         File dir = new File(dir_path);
-        File[] files = dir.listFiles();
+        File[] files = dir.listFiles(new FileFilterExtension());
 
         Set<String> matchList = new HashSet<>();
 
         for (File file : Objects.requireNonNull(files)) {
-
             try (
                     CSVParser parser = CSVFormat
                             .DEFAULT
                             .withQuote(null)
-                            .withHeader(
-                                    "NationalLocalGovernmentCode",
-                                    "OldPostalCode",
-                                    "PostalCode",
-                                    "NameOfPrefectures_Kana",
-                                    "CityName_Kana",
-                                    "TownAreaName_Kana",
-                                    "NameOfPrefectures_ChinaChara",
-                                    "CityName_ChinaChara",
-                                    "TownAreaName_ChinaChara",
-                                    "Flg1",
-                                    "Flg2",
-                                    "Flg3",
-                                    "Flg4",
-                                    "ViewUpdates",
-                                    "ReasonForChange")
                             .parse(new BufferedReader(new InputStreamReader(new FileInputStream(file))))) {
 
-
                 CSVRecord record = parser.getRecords().get(0);
-                System.out.println(record.get(0));
-                if (townNameSearcher.search(record.get(5), keyword)) {
-
+                if (townNameSearcher.search(record.get(5), "\"" + keyword)) {
                     matchList.add(record.get(5) + "," + record.get(6) + "," + record.get(7) + "," + record.get(8));
-                    System.out.println(record.get(5) + "," + record.get(6) + "," + record.get(7) + "," + record.get(8));
                 }
-
             }
-
         }
         return matchList;
     }
