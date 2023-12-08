@@ -19,20 +19,17 @@ public class PostalRecordFinder {
 
         return fileStream.fileFinder()
                 .map(file -> {
-                    try {
-                        CSVRecord record =
-                                CSVParser.parse(file, StandardCharsets.UTF_8, CSVFormat.DEFAULT)
+                    try(var parser = CSVParser.parse(file, StandardCharsets.UTF_8, CSVFormat.DEFAULT)) {
+                        CSVRecord record =parser
                                         .getRecords().get(0);
-                        if (townNameSearcher.search(record.get(5), "\"" + keyword)) {
                             return new PostalRecord(
                                     record.get(5), record.get(6), record.get(7), record.get(8)
                             );
-                        }
-                        return null;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 })
+                .filter(record -> record.choikiKana().startsWith(keyword))
                 .collect(Collectors.toList());
     }
 }
