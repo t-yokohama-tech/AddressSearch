@@ -5,7 +5,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.*;
 
 @SpringBootApplication
 @AllArgsConstructor
@@ -14,13 +13,13 @@ public class AddressFinder implements CommandLineRunner {
         SpringApplication.run(AddressFinder.class, args);
     }
 
-    private final TownNameGetterFromCSV townNameGetterFromCSV;//CSVから抜き出し
+    private final PostalRecordFinder townNameGetterFromCSV;//CSVから抜き出し
 
     private final ResultViewer resultViewer; //結果出力
 
     @Override
-    public void run(String... args) throws IOException {
+    public void run(String... args) {
 
-        resultViewer.output(townNameGetterFromCSV.getCsvInfo(args[0]));
+        resultViewer.output(townNameGetterFromCSV.find(args[0]));
     }
 }
