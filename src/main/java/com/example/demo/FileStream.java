@@ -7,16 +7,9 @@ import java.util.stream.Stream;
 public class FileStream {
     private final String dir_path = "/Users/yokohama/AddressSearch/dataset/";
 
-    public Stream<File> fileFinder(){
-        Stream.Builder<File> builder = Stream.builder();
+    private final FileFilterExtension fileFilterExtension = new FileFilterExtension();
 
-        File dir = new File(dir_path);
-        File[] files = dir.listFiles(new FileFilterExtension());
-
-        for(File file: Objects.requireNonNull(files)){
-            builder.add(file);
-        }
-
-        return builder.build();
+    public Stream<File> fileFind(){
+        return Stream.of(Objects.requireNonNull( new File(dir_path).listFiles(fileFilterExtension)));
     }
 }
