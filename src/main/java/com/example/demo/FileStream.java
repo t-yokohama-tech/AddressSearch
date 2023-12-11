@@ -9,7 +9,7 @@ public class FileStream {
 
     private final FileFilterExtension fileFilterExtension = new FileFilterExtension();
 
-    public Stream<File> fileFind(){
+    public Stream<File> iterate(){
         return Stream.of(Objects.requireNonNull( new File(dir_path).listFiles(fileFilterExtension)));
     }
 }
