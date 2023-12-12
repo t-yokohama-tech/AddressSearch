@@ -8,7 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PostalRecordPredicateTest {
 
-    private final PostalRecordPredicate target = new PostalRecordPredicate();
+    private final String keyword = "アサ";
+    private final PostalRecordPredicate target = new PostalRecordPredicate(keyword);
 
     @Nested
     class test {
@@ -16,15 +17,13 @@ public class PostalRecordPredicateTest {
         @Test
         void returnTrue(){
             var choikiKana = "アサヒガオカ";
-            var keyword = "アサ";
-            assertTrue(target.test(choikiKana,keyword));
+            assertTrue(target.test(choikiKana));
         }
 
         @Test
         void returnFalse(){
             var choikiKana = "ニシマチ";
-            var keyword = "アサ";
-            assertFalse(target.test(choikiKana,keyword));
+            assertFalse(target.test(choikiKana));
         }
     }
 }

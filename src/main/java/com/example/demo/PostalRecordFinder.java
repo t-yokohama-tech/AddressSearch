@@ -14,7 +14,7 @@ public class PostalRecordFinder {
 
         return fileStream.iterate()
                 .map(file -> new PostalRecordTypeConversionFunction().apply(new GetRecordFunction().apply(file)))
-                .filter(record -> new PostalRecordPredicate().test(record.choikiKana(),keyword))
+                .filter(record -> new PostalRecordPredicate(keyword).test(record.choikiKana()))
                 .collect(Collectors.toList());
     }
 }
