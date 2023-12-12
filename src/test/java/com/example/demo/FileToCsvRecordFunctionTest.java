@@ -10,14 +10,16 @@ import org.mockito.MockedStatic;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GetRecordFunctionTest {
+public class FileToCsvRecordFunctionTest {
 
-    private final GetRecordFunction target = new GetRecordFunction();
+    private final FileToCsvRecordFunction target = new FileToCsvRecordFunction();
 
     private final File file = mock(File.class);
 
@@ -51,9 +53,12 @@ public class GetRecordFunctionTest {
                 mockedCSVParser.when(() -> CSVParser.parse(any(File.class),any(Charset.class), any(CSVFormat.class)))
                         .thenReturn(csvParser);
 
-                target.apply(file);
+                var result = target.apply(file);
 
-                mockedCSVParser.verify(()->CSVParser.parse(any(File.class),any(Charset.class), any(CSVFormat.class)));
+                assertEquals(result, record);
+
+                mockedCSVParser.verify(()->CSVParser.parse(file, StandardCharsets.UTF_8, CSVFormat.DEFAULT));
+
             }
         }
         @Test

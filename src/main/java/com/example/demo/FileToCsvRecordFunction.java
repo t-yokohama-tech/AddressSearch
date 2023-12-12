@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
-public class GetRecordFunction implements Function<File,CSVRecord> {
+public class FileToCsvRecordFunction implements Function<File,CSVRecord> {
 
     @Override
     public CSVRecord apply(File file){

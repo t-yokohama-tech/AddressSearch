@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PostalRecordPredicateTest {
+public class PostalRecordKeywordMatchPredicateTest {
 
     private final String keyword = "アサ";
-    private final PostalRecordPredicate target = new PostalRecordPredicate(keyword);
+    private final PostalRecordKeywordMatchPredicate target = new PostalRecordKeywordMatchPredicate(keyword);
 
     @Nested
     class test {
@@ -17,13 +17,15 @@ public class PostalRecordPredicateTest {
         @Test
         void returnTrue(){
             var choikiKana = "アサヒガオカ";
-            assertTrue(target.test(choikiKana));
+            var postalRecord = new PostalRecord(choikiKana,"","","");
+            assertTrue(target.test(postalRecord));
         }
 
         @Test
         void returnFalse(){
             var choikiKana = "ニシマチ";
-            assertFalse(target.test(choikiKana));
+            var postalRecord = new PostalRecord(choikiKana,"","","");
+            assertFalse(target.test(postalRecord));
         }
     }
 }

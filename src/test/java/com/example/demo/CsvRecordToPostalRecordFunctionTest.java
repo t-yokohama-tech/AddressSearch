@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class PostalRecordTypeConversionFunctionTest {
+public class CsvRecordToPostalRecordFunctionTest {
 
-    private final PostalRecordTypeConversionFunction target = new PostalRecordTypeConversionFunction();
+    private final CsvRecordToPostalRecordFunction target = new CsvRecordToPostalRecordFunction();
 
     private final CSVRecord record = mock(CSVRecord.class);
     {

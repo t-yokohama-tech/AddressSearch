@@ -4,7 +4,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.util.function.Function;
 
-public class PostalRecordTypeConversionFunction implements Function<CSVRecord, PostalRecord> {
+public class CsvRecordToPostalRecordFunction implements Function<CSVRecord, PostalRecord> {
 
     @Override
     public PostalRecord apply(CSVRecord record) {

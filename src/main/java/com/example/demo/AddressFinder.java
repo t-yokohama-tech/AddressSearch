@@ -13,13 +13,13 @@ public class AddressFinder implements CommandLineRunner {
         SpringApplication.run(AddressFinder.class, args);
     }
 
-    private final PostalRecordFinder townNameGetterFromCSV;//CSVから抜き出し
+    private final PostalRecordFinder postalRecordFinder;//CSVから住所情報抜き出し
 
     private final ResultViewer resultViewer; //結果出力
 
     @Override
     public void run(String... args) {
 
-        resultViewer.output(townNameGetterFromCSV.find(args[0]));
+        resultViewer.output(postalRecordFinder.find(args[0]));
     }
 }
