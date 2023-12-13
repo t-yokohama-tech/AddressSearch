@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.File;
 
 @Configuration
-public class config {
+public class Config {
 
     private final String dir_path = "/Users/yokohama/AddressSearch/dataset/";
 
