@@ -11,14 +11,18 @@ public class PostalRecordFinder {
     private final FileToCsvRecordFunction fileToCsvRecordFunction;
     private final CsvRecordToPostalRecordFunction csvRecordToPostalRecordFunction;
 
+    private final PostalRecordKeywordMatchPredicate postalRecordKeywordMatchPredicate;
+
     public PostalRecordFinder(
             FileStream fileStream,
             FileToCsvRecordFunction fileToCsvRecordFunction,
-            CsvRecordToPostalRecordFunction csvRecordToPostalRecordFunction
+            CsvRecordToPostalRecordFunction csvRecordToPostalRecordFunction,
+            PostalRecordKeywordMatchPredicate keywordMatchPredicate
     ){
         this.fileStream = fileStream;
         this.fileToCsvRecordFunction = fileToCsvRecordFunction;
         this.csvRecordToPostalRecordFunction = csvRecordToPostalRecordFunction;
+        this.postalRecordKeywordMatchPredicate = keywordMatchPredicate;
     }
 
     public List<PostalRecord> find(String keyword) {
@@ -26,7 +30,7 @@ public class PostalRecordFinder {
         return fileStream.iterate()
                 .map(fileToCsvRecordFunction)
                 .map(csvRecordToPostalRecordFunction)
-                .filter(new PostalRecordKeywordMatchPredicate(keyword))
+                .filter(postalRecordKeywordMatchPredicate)
                 .toList();
     }
 }

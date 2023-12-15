@@ -15,4 +15,9 @@ public class Config {
     public File datasetDir(){
         return new File(dir_path);
     }
+
+    @Bean
+    public PostalRecordKeywordMatchPredicate keywordMatchPredicate(String keyword)  {
+        return new PostalRecordKeywordMatchPredicate(keyword);
+    }
 }
