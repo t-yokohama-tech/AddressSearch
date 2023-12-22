@@ -1,9 +1,11 @@
 package com.example.demo;
 
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
+@Component
 public class CsvRecordToPostalRecordFunction implements Function<CSVRecord, PostalRecord> {
 
     @Override

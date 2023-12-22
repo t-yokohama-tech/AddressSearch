@@ -85,15 +85,15 @@ public class PostalRecordFinderTest {
         doReturn(postalRecord4).when(csvRecordToPostalRecordFunction).apply(record4);
     }
 
-    private final PostalRecordKeywordMatchPredicate postalRecordKeywordMatchPredicate = mock(PostalRecordKeywordMatchPredicate.class);
-    {
-        doReturn(true).when(postalRecordKeywordMatchPredicate).test(postalRecord1);
-        doReturn(true).when(postalRecordKeywordMatchPredicate).test(postalRecord2);
-        doReturn(true).when(postalRecordKeywordMatchPredicate).test(postalRecord3);
-        doReturn(false).when(postalRecordKeywordMatchPredicate).test(postalRecord4);
-    }
+    private final PostalRecordKeywordMatchPredicateFactory postalRecordKeywordMatchPredicateFactory = mock(PostalRecordKeywordMatchPredicateFactory.class);
+//    {
+//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).create(keyword);
+//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).test(postalRecord2);
+//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).test(postalRecord3);
+//        doReturn(false).when(postalRecordKeywordMatchPredicateFactory).test(postalRecord4);
+//    }
     private final PostalRecordFinder target = new PostalRecordFinder(
-            fileStream, fileToCsvRecordFunction, csvRecordToPostalRecordFunction,postalRecordKeywordMatchPredicate
+            fileStream, fileToCsvRecordFunction, csvRecordToPostalRecordFunction,postalRecordKeywordMatchPredicateFactory
     );
 
     @Nested

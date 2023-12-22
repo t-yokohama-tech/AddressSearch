@@ -16,8 +16,8 @@ public class Config {
         return new File(dir_path);
     }
 
-    @Bean
-    public PostalRecordKeywordMatchPredicate keywordMatchPredicate(String keyword)  {
-        return new PostalRecordKeywordMatchPredicate(keyword);
-    }
+//    @Bean
+//    public PostalRecordKeywordMatchPredicateFactory postalRecordKeywordMatchPredicateFactory(String keyword)  {
+//        return new PostalRecordKeywordMatchPredicateFactory;
+//    }
 }
