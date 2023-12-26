@@ -12,15 +12,21 @@ public class PostalRecordFinder {
     private final FileToCsvRecordFunction fileToCsvRecordFunction;
     private final CsvRecordToPostalRecordFunction csvRecordToPostalRecordFunction;
 
+    private final PostalRecordKeywordMatchPredicateFactory postalRecordKeywordMatchPredicateFactory;
+
+
 
     public PostalRecordFinder(
             FileStream fileStream,
             FileToCsvRecordFunction fileToCsvRecordFunction,
-            CsvRecordToPostalRecordFunction csvRecordToPostalRecordFunction
+            CsvRecordToPostalRecordFunction csvRecordToPostalRecordFunction,
+            PostalRecordKeywordMatchPredicateFactory postalRecordKeywordMatchPredicateFactory
+
     ) {
         this.fileStream = fileStream;
         this.fileToCsvRecordFunction = fileToCsvRecordFunction;
         this.csvRecordToPostalRecordFunction = csvRecordToPostalRecordFunction;
+        this.postalRecordKeywordMatchPredicateFactory = postalRecordKeywordMatchPredicateFactory;
     }
 
     public List<PostalRecord> find(String keyword) throws IOException {
@@ -28,6 +34,7 @@ public class PostalRecordFinder {
         return fileStream.iterate(keyword)
                 .map(fileToCsvRecordFunction)
                 .map(csvRecordToPostalRecordFunction)
+                .filter(postalRecordKeywordMatchPredicateFactory.create(keyword))
                 .toList();
     }
 }

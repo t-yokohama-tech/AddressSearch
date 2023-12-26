@@ -19,10 +19,15 @@ public class IndicesFileFinder {
 
     public Stream<String> indicesFileGet(String keyword) throws IOException {
 
-        Path in = Path.of(indicesFile + "/" + keyword);
+        Path in = Path.of(indicesFile + "/" + keyword.substring(0,2));
 
-        var fileNames = Files.readAllLines(in);
-        return fileNames.stream();
+        try {
+            var fileNames = Files.readAllLines(in);
+            return fileNames.stream();
+        } catch (IOException e) {
+            System.out.println("該当ファイルなし");
+            System.exit(0);
+        }
+        return null;
     }
-
 }
