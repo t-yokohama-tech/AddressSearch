@@ -25,8 +25,6 @@ public class PostalRecordFinder {
 
     public List<PostalRecord> find(String keyword) throws IOException {
 
-        System.out.println("filestream:" + fileStream);
-
         return fileStream.iterate(keyword)
                 .map(fileToCsvRecordFunction)
                 .map(csvRecordToPostalRecordFunction)

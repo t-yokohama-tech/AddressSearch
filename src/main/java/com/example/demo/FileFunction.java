@@ -12,7 +12,6 @@ public class FileFunction implements Function<String, File> {
 
     @Override
     public File apply(String fileName) {
-        // stringでファイル名を受け取り、pathを設定して、Fileを返す
         return new File(dir_path+fileName);
     }
 }
