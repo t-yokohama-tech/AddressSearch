@@ -24,7 +24,7 @@ public class IndicesFileFinder {
         this.indicesFile = indicesDir;
     }
 
-    public Stream<String> indicesFileGetter(String keyword) throws IOException {
+    public Stream<String> indicesFileGet(String keyword) throws IOException {
 
         Path in = Path.of(indicesFile + "/" + keyword);
 

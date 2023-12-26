@@ -22,7 +22,7 @@ public class FileStream {
 
     public Stream<File> iterate(String keyword) throws IOException {
 
-        var indicesFileStream = indicesFileFinder.indicesFileGetter(keyword);
+        var indicesFileStream = indicesFileFinder.indicesFileGet(keyword);
 
         return indicesFileStream
                 .map(fileFunction);
