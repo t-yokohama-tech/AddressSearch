@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -19,14 +20,12 @@ public class PostalRecordFinderTest {
     private final File file1 = mock(File.class);
     private final File file2 = mock(File.class);
     private final File file3 = mock(File.class);
-    private final File file4 = mock(File.class);
 
-    private final  File[] files = {file1,file2,file3,file4};
+    private final  File[] files = {file1,file2,file3};
 
     private final CSVRecord record1 = mock(CSVRecord.class);
     private final CSVRecord record2 = mock(CSVRecord.class);
     private final CSVRecord record3 = mock(CSVRecord.class);
-    private final CSVRecord record4 = mock(CSVRecord.class);
     {
         doReturn("アサクサ").when(record1).get(5);
         doReturn("東京都").when(record1).get(6);
@@ -43,10 +42,6 @@ public class PostalRecordFinderTest {
         doReturn("八代市").when(record3).get(7);
         doReturn("旭中央通").when(record3).get(8);
 
-        doReturn("イカニケイサイガナイバアイ").when(record4).get(5);
-        doReturn("埼玉県").when(record4).get(6);
-        doReturn("川越市").when(record4).get(7);
-        doReturn("以下に掲載がない場合").when(record4).get(8);
     }
 
     private final PostalRecord postalRecord1 =
@@ -58,15 +53,17 @@ public class PostalRecordFinderTest {
     private final PostalRecord postalRecord3 =
             new PostalRecord(record3.get(5),record3.get(6),record3.get(7),record3.get(8));
 
-    private final PostalRecord postalRecord4 =
-            new PostalRecord(record4.get(5),record4.get(6),record4.get(7),record4.get(8));
 
     private final List<PostalRecord> postalRecords = List.of(postalRecord1,postalRecord2,postalRecord3);
 
 
     private final FileStream fileStream = mock(FileStream.class);
     {
-        doReturn(Stream.of(files)).when(fileStream).iterate();
+        try {
+            doReturn(Stream.of(files)).when(fileStream).iterate(keyword);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private final FileToCsvRecordFunction fileToCsvRecordFunction = mock(FileToCsvRecordFunction.class);
@@ -74,7 +71,6 @@ public class PostalRecordFinderTest {
         doReturn(record1).when(fileToCsvRecordFunction).apply(file1);
         doReturn(record2).when(fileToCsvRecordFunction).apply(file2);
         doReturn(record3).when(fileToCsvRecordFunction).apply(file3);
-        doReturn(record4).when(fileToCsvRecordFunction).apply(file4);
     }
 
     private final CsvRecordToPostalRecordFunction csvRecordToPostalRecordFunction = mock(CsvRecordToPostalRecordFunction.class);
@@ -82,39 +78,30 @@ public class PostalRecordFinderTest {
         doReturn(postalRecord1).when(csvRecordToPostalRecordFunction).apply(record1);
         doReturn(postalRecord2).when(csvRecordToPostalRecordFunction).apply(record2);
         doReturn(postalRecord3).when(csvRecordToPostalRecordFunction).apply(record3);
-        doReturn(postalRecord4).when(csvRecordToPostalRecordFunction).apply(record4);
     }
 
-    private final PostalRecordKeywordMatchPredicateFactory postalRecordKeywordMatchPredicateFactory = mock(PostalRecordKeywordMatchPredicateFactory.class);
-//    {
-//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).create(keyword);
-//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).test(postalRecord2);
-//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).test(postalRecord3);
-//        doReturn(false).when(postalRecordKeywordMatchPredicateFactory).test(postalRecord4);
-//    }
+
     private final PostalRecordFinder target = new PostalRecordFinder(
-            fileStream, fileToCsvRecordFunction, csvRecordToPostalRecordFunction,postalRecordKeywordMatchPredicateFactory
+            fileStream, fileToCsvRecordFunction, csvRecordToPostalRecordFunction
     );
 
     @Nested
     class find {
         @Test
-        void returnPostalRecords() {
+        void returnPostalRecords() throws IOException {
             var result = target.find(keyword);
 
             assertEquals(postalRecords,result);
 
-            verify(fileStream).iterate();
-            
+            verify(fileStream).iterate(keyword);
+
             verify(fileToCsvRecordFunction).apply(file1);
             verify(fileToCsvRecordFunction).apply(file2);
             verify(fileToCsvRecordFunction).apply(file3);
-            verify(fileToCsvRecordFunction).apply(file4);
 
             verify(csvRecordToPostalRecordFunction).apply(record1);
             verify(csvRecordToPostalRecordFunction).apply(record2);
             verify(csvRecordToPostalRecordFunction).apply(record3);
-            verify(csvRecordToPostalRecordFunction).apply(record4);
         }
     }
 }

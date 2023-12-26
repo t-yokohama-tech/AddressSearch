@@ -5,6 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
+
 
 @SpringBootApplication
 @AllArgsConstructor
@@ -18,7 +20,7 @@ public class AddressFinder implements CommandLineRunner {
     private final ResultViewer resultViewer; //結果出力
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException {
 
         resultViewer.output(postalRecordFinder.find(args[0]));
     }

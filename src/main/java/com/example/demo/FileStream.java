@@ -3,22 +3,28 @@ package com.example.demo;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.Objects;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 @Component
 public class FileStream {
 
-    private final File file;
-    private final FileFilter fileFilter;
+    private final IndicesFileFinder indicesFileFinder;
 
-    public FileStream(File datasetDir, FileFilter dataFileFilter){
-        this.fileFilter = dataFileFilter;
-        this.file = datasetDir;
+    private final FileFunction fileFunction;
+
+    public FileStream(
+            IndicesFileFinder indicesFileFinder,
+            FileFunction fileFunction) {
+        this.indicesFileFinder = indicesFileFinder;
+        this.fileFunction = fileFunction;
     }
 
-    public Stream<File> iterate(){
-        return Stream.of(Objects.requireNonNull(file.listFiles(fileFilter)));
+    public Stream<File> iterate(String keyword) throws IOException {
+
+        var indicesFileStream = indicesFileFinder.indicesFileGetter(keyword);
+
+        return indicesFileStream
+                .map(fileFunction);
     }
 }
