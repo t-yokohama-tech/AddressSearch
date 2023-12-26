@@ -29,7 +29,7 @@ public class FileStreamTest {
     private final IndicesFileFinder indicesFileFinder = mock(IndicesFileFinder.class);
     {
         try {
-            doReturn(indicesFileStream).when(indicesFileFinder).indicesFileGetter(any());
+            doReturn(indicesFileStream).when(indicesFileFinder).indicesFileGet(any());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -53,7 +53,7 @@ public class FileStreamTest {
 
             assertEquals(Stream.of(files), result);
 
-            verify(indicesFileFinder).indicesFileGetter(keyword);
+            verify(indicesFileFinder).indicesFileGet(keyword);
             verify(fileFunction).apply(fileName1);
             verify(fileFunction).apply(fileName2);
             verify(fileFunction).apply(fileName3);
