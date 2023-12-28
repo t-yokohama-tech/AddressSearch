@@ -26,23 +26,23 @@ public class FileStreamTest {
     private final Stream<String> indicesFileStream = Stream.of(fileName1,fileName2,fileName3);
 
 
-    private final Indices indicesFileFinder = mock(Indices.class);
+    private final Indices indices = mock(Indices.class);
     {
         try {
-            doReturn(indicesFileStream).when(indicesFileFinder).read(any());
+            doReturn(indicesFileStream).when(indices).read(any());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private final DataFileNameToFileFunction fileFunction = mock(DataFileNameToFileFunction.class);
+    private final DataFileNameToFileFunction dataFileNameToFileFunction = mock(DataFileNameToFileFunction.class);
     {
-        doReturn(file1).when(fileFunction).apply(fileName1);
-        doReturn(file2).when(fileFunction).apply(fileName2);
-        doReturn(file3).when(fileFunction).apply(fileName3);
+        doReturn(file1).when(dataFileNameToFileFunction).apply(fileName1);
+        doReturn(file2).when(dataFileNameToFileFunction).apply(fileName2);
+        doReturn(file3).when(dataFileNameToFileFunction).apply(fileName3);
     }
 
-    private final FileStream target = new FileStream(indicesFileFinder, fileFunction);
+    private final FileStream target = new FileStream(indices, dataFileNameToFileFunction);
 
     @Nested
     class iterate {
@@ -51,12 +51,14 @@ public class FileStreamTest {
         void returnStreamFile() throws IOException {
             var result = target.iterate(keyword);
 
-            assertEquals(Stream.of(files), result);
+            var ex = Stream.of(files);
 
-            verify(indicesFileFinder).read(keyword);
-            verify(fileFunction).apply(fileName1);
-            verify(fileFunction).apply(fileName2);
-            verify(fileFunction).apply(fileName3);
+            assertEquals(ex, result);
+
+            verify(indices).read(keyword);
+            verify(dataFileNameToFileFunction).apply(fileName1);
+            verify(dataFileNameToFileFunction).apply(fileName2);
+            verify(dataFileNameToFileFunction).apply(fileName3);
         }
     }
 }

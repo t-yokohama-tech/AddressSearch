@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,12 +15,11 @@ import static org.mockito.Mockito.verify;
 
 public class PostalRecordFinderTest {
 
-    private final String keyword = "アサ";
+    private final String keyword = "アサヒ";
 
     private final File file1 = mock(File.class);
     private final File file2 = mock(File.class);
     private final File file3 = mock(File.class);
-
     private final  File[] files = {file1,file2,file3};
 
     private final CSVRecord record1 = mock(CSVRecord.class);
@@ -33,10 +31,10 @@ public class PostalRecordFinderTest {
         doReturn("台東区").when(record1).get(7);
         doReturn("浅草").when(record1).get(8);
 
-        doReturn("アサカマチ（シバミヤヒガシ）").when(record2).get(5);
-        doReturn("福島県").when(record2).get(6);
-        doReturn("郡山市").when(record2).get(7);
-        doReturn("安積町（柴宮東）").when(record2).get(8);
+        doReturn("アサヒマチ").when(record2).get(5);
+        doReturn("北海道").when(record2).get(6);
+        doReturn("北見市").when(record2).get(7);
+        doReturn("朝日町").when(record2).get(8);
 
         doReturn("アサヒチュウオウドオリ").when(record3).get(5);
         doReturn("熊本県").when(record3).get(6);
@@ -54,8 +52,7 @@ public class PostalRecordFinderTest {
     private final PostalRecord postalRecord3 =
             new PostalRecord(record3.get(5),record3.get(6),record3.get(7),record3.get(8));
 
-
-    private final List<PostalRecord> postalRecords = List.of(postalRecord1,postalRecord2,postalRecord3);
+    private final List<PostalRecord> postalRecords = List.of(postalRecord2,postalRecord3);
 
 
     private final FileStream fileStream = mock(FileStream.class);
@@ -82,10 +79,17 @@ public class PostalRecordFinderTest {
     }
 
 
+    private final PostalRecordKeywordMatchPredicate postalRecordKeywordMatchPredicate = mock(PostalRecordKeywordMatchPredicate.class);
+    {
+        doReturn(false).when(postalRecordKeywordMatchPredicate).test(postalRecord1);
+        doReturn(true).when(postalRecordKeywordMatchPredicate).test(postalRecord2);
+        doReturn(true).when(postalRecordKeywordMatchPredicate).test(postalRecord3);
+    }
+
     private final PostalRecordKeywordMatchPredicateFactory postalRecordKeywordMatchPredicateFactory = mock(PostalRecordKeywordMatchPredicateFactory.class);
-//    {
-//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).create(any());
-//    }
+    {
+        doReturn(postalRecordKeywordMatchPredicate).when(postalRecordKeywordMatchPredicateFactory).create(any());
+    }
 
 
     private final PostalRecordFinder target = new PostalRecordFinder(
@@ -110,6 +114,7 @@ public class PostalRecordFinderTest {
             verify(csvRecordToPostalRecordFunction).apply(record2);
             verify(csvRecordToPostalRecordFunction).apply(record3);
 
+            verify(postalRecordKeywordMatchPredicateFactory).create(keyword);
 
         }
     }
