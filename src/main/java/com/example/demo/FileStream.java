@@ -9,22 +9,22 @@ import java.util.stream.Stream;
 @Component
 public class FileStream {
 
-    private final IndicesFileFinder indicesFileFinder;
+    private final Indices indices;
 
-    private final FileFunction fileFunction;
+    private final DataFileNameToFileFunction dataFileNameToFileFunction;
 
     public FileStream(
-            IndicesFileFinder indicesFileFinder,
-            FileFunction fileFunction) {
-        this.indicesFileFinder = indicesFileFinder;
-        this.fileFunction = fileFunction;
+            Indices indicesDir,
+            DataFileNameToFileFunction dataFileNameToFileFunction) {
+        this.indices = indicesDir;
+        this.dataFileNameToFileFunction = dataFileNameToFileFunction;
     }
 
     public Stream<File> iterate(String keyword) throws IOException {
 
-        var indicesFileStream = indicesFileFinder.indicesFileGet(keyword);
+        var indicesFileStream = indices.read(keyword);
 
         return indicesFileStream
-                .map(fileFunction);
+                .map(dataFileNameToFileFunction);
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,8 +82,14 @@ public class PostalRecordFinderTest {
     }
 
 
+    private final PostalRecordKeywordMatchPredicateFactory postalRecordKeywordMatchPredicateFactory = mock(PostalRecordKeywordMatchPredicateFactory.class);
+//    {
+//        doReturn(true).when(postalRecordKeywordMatchPredicateFactory).create(any());
+//    }
+
+
     private final PostalRecordFinder target = new PostalRecordFinder(
-            fileStream, fileToCsvRecordFunction, csvRecordToPostalRecordFunction
+            fileStream, fileToCsvRecordFunction, csvRecordToPostalRecordFunction,postalRecordKeywordMatchPredicateFactory
     );
 
     @Nested
@@ -102,6 +109,8 @@ public class PostalRecordFinderTest {
             verify(csvRecordToPostalRecordFunction).apply(record1);
             verify(csvRecordToPostalRecordFunction).apply(record2);
             verify(csvRecordToPostalRecordFunction).apply(record3);
+
+
         }
     }
 }
